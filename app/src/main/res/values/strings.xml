@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Fauzan_SleepQuality</string>
+    <string name="title_input">Masukkan Waktu Tidur dan Bangun</string>
+    <string name="sleep_time">Jam Tidur (HH:MM)</string>
+    <string name="wake_time">Jam Bangun (HH:MM)</string>
+    <string name="check_button">Cek Kualitas Tidur</string>
+    <string name="result_title">Hasil Kualitas Tidur</string>
+    <string name="back_button">Kembali</string>
 </resources>
