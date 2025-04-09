@@ -15,7 +15,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import com.fauzan0111.fauzan_sleepquality.R
 
 
 @Composable
@@ -26,22 +28,31 @@ fun InputScreen(navController: NavController) {
     val sleepFocusRequester = remember { FocusRequester() }
     val wakeFocusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
+//    val context = LocalContext.current
 
-    // Regex format jam: 00.00 s/d 23.59
     val timePattern = Regex("^([0-1]\\d|2[0-3])\\.(0\\d|[1-5]\\d)$")
-
-    // Validasi input sesuaikan dengan format 00.00 - 23.59, bukan 12 atau 6
-    val isValid = timePattern.matches(sleepTime) && timePattern.matches(wakeTime)
+    val isSleepValid = timePattern.matches(sleepTime)
+    val isWakeValid = timePattern.matches(wakeTime)
+    val isValid = isSleepValid && isWakeValid
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text("Jam Tidur (ex: 22.00)")
         OutlinedTextField(
             value = sleepTime,
             onValueChange = { sleepTime = it },
+            label = { Text(stringResource(R.string.jam_tidur)) },
+            isError = sleepTime.isNotBlank() && !isSleepValid,
+            supportingText = {
+                if (sleepTime.isNotBlank() && !isSleepValid) {
+                    Text(
+                        text = stringResource(R.string.format_salah, "22.00"),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .focusRequester(sleepFocusRequester),
@@ -59,10 +70,19 @@ fun InputScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Text("Jam Bangun (ex: 06.00)")
         OutlinedTextField(
             value = wakeTime,
             onValueChange = { wakeTime = it },
+            label = { Text(stringResource(R.string.jam_bangun)) },
+            isError = wakeTime.isNotBlank() && !isWakeValid,
+            supportingText = {
+                if (wakeTime.isNotBlank() && !isWakeValid) {
+                    Text(
+                        text = stringResource(R.string.format_salah,"06.00"),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .focusRequester(wakeFocusRequester),
@@ -87,8 +107,11 @@ fun InputScreen(navController: NavController) {
             },
             enabled = isValid
         ) {
-            Text("Cek Kualitas Tidur")
+            Text(stringResource(R.string.cek_kualitas_tidur))
         }
     }
 }
+
+
+
 
