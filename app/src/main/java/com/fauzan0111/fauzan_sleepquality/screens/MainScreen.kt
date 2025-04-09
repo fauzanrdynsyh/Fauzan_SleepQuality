@@ -1,8 +1,11 @@
 package com.fauzan0111.fauzan_sleepquality.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bedtime
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,6 +24,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.fauzan0111.fauzan_sleepquality.R
 import com.fauzan0111.fauzan_sleepquality.nav.Screen
+import com.fauzan0111.fauzan_sleepquality.ui.theme.Fauzan_SleepQualityTheme
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,9 +36,19 @@ fun MainScreen(navController: NavController) {
                 title = {
                     Text(
                         text = stringResource(R.string.app_name),
-                        style = MaterialTheme.typography.titleLarge
+                        style = MaterialTheme.typography.titleLarge,
                     )
-                }
+                },
+                navigationIcon = {
+                    Icon(
+                        imageVector = Icons.Filled.Bedtime,
+                        contentDescription = "Sleep Icon",
+                        modifier = Modifier.padding(horizontal = 12.dp)
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                )
             )
         }
     ) { paddingValues ->
@@ -90,10 +104,19 @@ fun MainScreen(navController: NavController) {
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview(showBackground = true)
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true
+)
+@Preview(
+    showSystemUi = true
+)
 @Composable
 fun MainScreenPreview() {
     val navController = rememberNavController()
-    MainScreen(navController = navController)
+    Fauzan_SleepQualityTheme {
+        MainScreen(navController = navController)
+    }
 }
 
