@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.fauzan0111.fauzan_sleepquality.R
-import com.fauzan0111.fauzan_sleepquality.nav.Screen
 import com.fauzan0111.fauzan_sleepquality.ui.theme.Fauzan_SleepQualityTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
