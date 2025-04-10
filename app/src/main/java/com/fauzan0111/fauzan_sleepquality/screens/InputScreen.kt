@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -29,8 +30,8 @@ import com.fauzan0111.fauzan_sleepquality.util.calculateSleepHours
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InputScreen(navController: NavController) {
-    var sleepTime by remember { mutableStateOf("") }
-    var wakeTime by remember { mutableStateOf("") }
+    var sleepTime by rememberSaveable { mutableStateOf("") }
+    var wakeTime by rememberSaveable { mutableStateOf("") }
 
     val sleepFocusRequester = remember { FocusRequester() }
     val wakeFocusRequester = remember { FocusRequester() }

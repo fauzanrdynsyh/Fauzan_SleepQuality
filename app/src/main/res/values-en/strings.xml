@@ -53,4 +53,6 @@
     <string name="kembali">Back</string>
     <string name="total_tidur">Total sleep: %1$s hours</string>
     <string name="kualitas_tidur">Quality: %1$s</string>
+    <string name="bagikan">Share</string>
+    <string name="bagikan_template">Total Sleep: %1$s \nHoursQuality:%2$s</string>
 </resources>

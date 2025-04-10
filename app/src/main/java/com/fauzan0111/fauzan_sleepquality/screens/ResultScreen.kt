@@ -1,5 +1,7 @@
 package com.fauzan0111.fauzan_sleepquality.screens
 
+import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -9,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +38,8 @@ fun ResultScreen(
         sleepHours in 6.0..8.0 -> R.drawable.tidur_cukup
         else -> R.drawable.tidur_berlebihan
     }
+
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -89,7 +94,32 @@ fun ResultScreen(
             }) {
                 Text(stringResource(R.string.lihat_tips_tidur))
             }
+
+            Spacer(modifier = Modifier.height(56.dp))
+
+            Button(
+                onClick = {
+                    shareData(
+                        context = context,
+                        message = context.getString(R.string.bagikan_template)
+                    )
+                },
+                modifier = Modifier.padding(top = 8.dp),
+                contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
+            ) {
+                Text(text = stringResource(R.string.bagikan))
+            }
         }
+    }
+}
+
+private fun shareData(context: Context, message: String) {
+    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_TEXT, message)
+    }
+    if (shareIntent.resolveActivity(context.packageManager)!= null){
+        context.startActivity(shareIntent)
     }
 }
 

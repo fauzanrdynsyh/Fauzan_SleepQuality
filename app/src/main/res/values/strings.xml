@@ -52,4 +52,6 @@
     <string name="kembali">Kembali</string>
     <string name="total_tidur">Total tidur: %1$s jam</string>
     <string name="kualitas_tidur">Kualitas: %1$s</string>
+    <string name="bagikan">Bagikan</string>
+    <string name="bagikan_template">Total Tidur: %1$.2f Jam\nKualitas:%2$s</string>
 </resources>
