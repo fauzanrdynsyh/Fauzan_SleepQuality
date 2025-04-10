@@ -86,7 +86,7 @@ fun ResultScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(onClick = {
-                navController.navigate(Screen.Info.route)
+                navController.navigate("info?from=result")
             }) {
                 Text(stringResource(R.string.lihat_tips_tidur))
             }

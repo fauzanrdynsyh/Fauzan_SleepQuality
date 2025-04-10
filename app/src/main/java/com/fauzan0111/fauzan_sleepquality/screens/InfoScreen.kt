@@ -20,12 +20,13 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.fauzan0111.fauzan_sleepquality.R
 import com.fauzan0111.fauzan_sleepquality.model.SleepCategory
+import com.fauzan0111.fauzan_sleepquality.nav.Screen
 import com.fauzan0111.fauzan_sleepquality.ui.theme.Fauzan_SleepQualityTheme
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InfoScreen(navController: NavController) {
+fun InfoScreen(navController: NavController, from:String) {
     val defaultCategory = stringResource(R.string.tidur_cukup)
     var selectedCategory by remember { mutableStateOf(defaultCategory) }
 
@@ -70,7 +71,15 @@ fun InfoScreen(navController: NavController) {
             TopAppBar(
                 title = { Text(stringResource(R.string.info_tidur)) },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = {
+                        if (from == "result") {
+                            navController.popBackStack()
+                        } else {
+                            navController.navigate(Screen.Main.route) {
+                                popUpTo(Screen.Main.route) { inclusive = false }
+                            }
+                        }
+                    }){
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back"
@@ -115,8 +124,7 @@ fun InfoScreen(navController: NavController) {
 
                 ExposedDropdownMenuBox(
                     expanded = expanded,
-                    onExpandedChange = { expanded = !expanded },
-                    modifier = Modifier.fillMaxWidth() // <-- pindah ke sini
+                    onExpandedChange = { expanded = !expanded }
                 ) {
                     TextField(
                         value = selectedCategory,
@@ -124,9 +132,10 @@ fun InfoScreen(navController: NavController) {
                         readOnly = true,
                         label = { Text(stringResource(R.string.pilih_kategori_tidur)) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
-                        modifier = Modifier.fillMaxWidth() // bisa tetap di sini juga sih
+                        modifier = Modifier
+                            .menuAnchor()
+                            .fillMaxWidth()
                     )
-
                     ExposedDropdownMenu(
                         expanded = expanded,
                         onDismissRequest = { expanded = false }
@@ -188,6 +197,6 @@ fun InfoScreen(navController: NavController) {
 fun InfoScreenPreview() {
     val navController = rememberNavController()
     Fauzan_SleepQualityTheme {
-        InfoScreen(navController = navController)
+        InfoScreen(navController = navController, from = "main")
     }
 }
