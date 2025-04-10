@@ -43,6 +43,9 @@
     <string name="tips_tidur_berlebihan_2">2. Hindari tidur siang terlalu lama</string>
     <string name="tips_tidur_berlebihan_3">3. Tetapkan waktu bangun yang konsisten, bahkan di akhir pekan</string>
 
-    <string name="result_title">Hasil Kualitas Tidur</string>
-    <string name="back_button">Kembali</string>
+    <string name="input_tidur">Input Waktu Tidur</string>
+    <string name="hasil_tidur">Hasil Tidur</string>
+    <string name="kembali">Kembali</string>
+    <string name="total_tidur">Total tidur: %1$s jam</string>
+    <string name="kualitas_tidur">Kualitas: %1$s</string>
 </resources>
