@@ -17,6 +17,7 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.DropdownMenuItem
 import android.content.res.Configuration
 import com.fauzan0111.fauzan_sleepquality.R
+import com.fauzan0111.fauzan_sleepquality.model.SleepCategory
 import com.fauzan0111.fauzan_sleepquality.ui.theme.Fauzan_SleepQualityTheme
 
 
@@ -103,13 +104,69 @@ fun InfoScreen() {
 
                 when (selectedCategory) {
                     stringResource(R.string.tidur_cukup) -> {
-                        Text(stringResource(R.string.desc_tidur_cukup))
+                        val tips = listOf(
+                            Pair(R.string.tips_tidur_cukup_1, R.drawable.jadwal_tidur),
+                            Pair(R.string.tips_tidur_cukup_2, R.drawable.lingkungan_tidur),
+                            Pair(R.string.tips_tidur_cukup_3, R.drawable.hindari_kafein)
+                        )
+
+                        tips.forEach { (tipRes, imageRes) ->
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(text = stringResource(tipRes))
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Image(
+                                painter = painterResource(id = imageRes),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(150.dp),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
                     }
+
                     stringResource(R.string.tidur_kurang) -> {
-                        Text(stringResource(R.string.desc_tidur_kurang))
+                        val tips = listOf(
+                            Pair(R.string.tips_tidur_kurang_1, R.drawable.tidur_awal),
+                            Pair(R.string.tips_tidur_kurang_2, R.drawable.relaksasi),
+                            Pair(R.string.tips_tidur_kurang_3, R.drawable.no_kafein)
+                        )
+
+                        tips.forEach { (tipRes, imageRes) ->
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(text = stringResource(tipRes))
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Image(
+                                painter = painterResource(id = imageRes),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(150.dp),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
                     }
+
                     stringResource(R.string.tidur_berlebihan) -> {
-                        Text(stringResource(R.string.desc_tidur_berlebihan))
+                        val tips = listOf(
+                            Pair(R.string.tips_tidur_berlebihan_1, R.drawable.morning_routine),
+                            Pair(R.string.tips_tidur_berlebihan_2, R.drawable.tidur_siang),
+                            Pair(R.string.tips_tidur_berlebihan_3, R.drawable.terapkan_waktu)
+                        )
+
+                        tips.forEach { (tipRes, imageRes) ->
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(text = stringResource(tipRes))
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Image(
+                                painter = painterResource(id = imageRes),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(150.dp),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
                     }
                 }
 
@@ -118,6 +175,24 @@ fun InfoScreen() {
         }
     }
 }
+
+val sleepCategories = listOf(
+    SleepCategory(
+        title = R.string.tidur_cukup,
+        description = R.string.desc_tidur_cukup,
+        tips = listOf(R.string.tips_tidur_cukup_1, R.string.tips_tidur_cukup_2)
+    ),
+    SleepCategory(
+        title = R.string.tidur_kurang,
+        description = R.string.desc_tidur_kurang,
+        tips = listOf(R.string.tips_tidur_kurang_1, R.string.tips_tidur_kurang_2)
+    ),
+    SleepCategory(
+        title = R.string.tidur_berlebihan,
+        description = R.string.desc_tidur_berlebihan,
+        tips = listOf(R.string.tips_tidur_berlebihan_1, R.string.tips_tidur_berlebihan_2)
+    )
+)
 
 @Preview(showBackground = true)
 @Preview(
