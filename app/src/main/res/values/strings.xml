@@ -3,6 +3,10 @@
     <string name="title_input">Masukkan Waktu Tidur dan Bangun</string>
     <string name="app_title">Kualitas Tidur</string>
     <string name="info_tidur">Tips Tidur</string>
+    <string name="tentang_aplikasi">Tentang Aplikasi</string>
+    <string name="versi">Versi 1.0.0</string>
+    <string name="dibuat">Dibuat oleh: Fauzan Nurdiansyah</string>
+    <string name="copyright">© 2025 Sleep Quality App</string>
     <string name="lihat_tips_tidur">Lihat Tips Tidur</string>
     <string name="cek_kualitas_tidur">Cek Kualitas Tidur</string>
     <string name="welcome_text">Halooo!</string>
