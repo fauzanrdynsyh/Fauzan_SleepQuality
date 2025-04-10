@@ -12,6 +12,16 @@
     <string name="jam_tidur">Jam Tidur (ex: 22.00)</string>
     <string name="jam_bangun">Jam Bangun (ex: 06.00)</string>
     <string name="format_salah">Format salah (contoh: %1$s)</string>
+    <string name="illustration_tidur">Ilustrasi tidur</string>
+    <string name="info_deskripsi_awal">Tidur adalah kebutuhan penting bagi kesehatan tubuh dan pikiran.
+        Berikut ini penjelasan tentang beberapa kategori tidur:</string>
+    <string name="pilih_kategori_tidur">Pilih Kategori Tidur</string>
+    <string name="tidur_cukup">Tidur Cukup</string>
+    <string name="tidur_kurang">Tidur Kurang</string>
+    <string name="tidur_berlebihan">Tidur Berlebihan</string>
+    <string name="desc_tidur_cukup">Tidur cukup membantu regenerasi tubuh, menjaga imun, dan konsentrasi optimal.</string>
+    <string name="desc_tidur_kurang">Kurang tidur dapat menyebabkan kelelahan, sulit fokus, hingga meningkatkan risiko penyakit.</string>
+    <string name="desc_tidur_berlebihan">Tidur terlalu lama juga tidak baik, bisa berhubungan dengan depresi atau gangguan metabolisme.</string>
     <string name="result_title">Hasil Kualitas Tidur</string>
     <string name="back_button">Kembali</string>
 </resources>
