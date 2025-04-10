@@ -2,9 +2,10 @@
     <string name="app_name">Kualitas Tidur</string>
     <string name="title_input">Masukkan Waktu Tidur dan Bangun</string>
     <string name="app_title">Kualitas Tidur</string>
-    <string name="info_tidur">Info Tidur</string>
+    <string name="info_tidur">Tips Tidur</string>
+    <string name="lihat_tips_tidur">Lihat Tips Tidur</string>
     <string name="cek_kualitas_tidur">Cek Kualitas Tidur</string>
-    <string name="welcome_text">Hello!</string>
+    <string name="welcome_text">Halooo!</string>
     <string name="landing_description">Pantau kualitas tidurmu dan temukan tips untuk tidur lebih nyenyak.
         Aplikasi ini membantumu memahami pola tidur dan meningkatkan kesehatan harianmu.</string>
     <string name="landing_tagline">Tidur berkualitas menciptakan hari yang hebat</string>
@@ -19,26 +20,28 @@
     <string name="tidur_cukup">Tidur Cukup</string>
     <string name="desc_tidur_cukup">Tidur 6 sampai 8 jam sangat ideal untuk orang dewasa.
         Waktu tidur yang cukup membantu tubuh memperbaiki sel-sel, meningkatkan konsentrasi, dan menjaga keseimbangan emosi.
-        Tidur teratur juga dapat meningkatkan sistem imun dan produktivitas harian.</string>
-    <string name="tips_tidur_cukup_1">Pertahankan jadwal tidur yang konsisten</string>
-    <string name="tips_tidur_cukup_2">Ciptakan lingkungan tidur yang nyaman dan gelap</string>
-    <string name="tips_tidur_cukup_3">Hindari kafein atau layar gadget sebelum tidur</string>
+        Tidur teratur juga dapat meningkatkan sistem imun dan produktivitas harian.
+        Untuk itu aku punya tips nya nih:</string>
+    <string name="tips_tidur_cukup_1">1. Pertahankan jadwal tidur yang konsisten</string>
+    <string name="tips_tidur_cukup_2">2. Ciptakan lingkungan tidur yang nyaman dan gelap</string>
+    <string name="tips_tidur_cukup_3">3. Hindari kafein atau layar gadget sebelum tidur</string>
 
     <string name="tidur_kurang">Tidur Kurang</string>
     <string name="desc_tidur_kurang">Kurang tidur dapat menyebabkan kelelahan, stres, dan masalah konsentrasi.
         Dalam jangka panjang, bisa memengaruhi daya tahan tubuh, meningkatkan risiko penyakit jantung,
-        serta mengganggu kesehatan mental seperti kecemasan dan depresi.</string>
-    <string name="tips_tidur_kurang_1">Coba tidur lebih awal setiap hari</string>
-    <string name="tips_tidur_kurang_2">Gunakan teknik relaksasi seperti napas dalam</string>
-    <string name="tips_tidur_kurang_3">Kurangi konsumsi kafein di sore hari</string>
+        serta mengganggu kesehatan mental seperti kecemasan dan depresi.
+        Untuk itu aku punya tips nya nih:</string>
+    <string name="tips_tidur_kurang_1">1. Coba tidur lebih awal setiap hari</string>
+    <string name="tips_tidur_kurang_2">2. Gunakan teknik relaksasi seperti napas dalam</string>
+    <string name="tips_tidur_kurang_3">3. Kurangi konsumsi kafein di sore hari</string>
 
     <string name="tidur_berlebihan">Tidur Berlebihan</string>
     <string name="desc_tidur_berlebihan">Terlalu banyak tidur bisa menjadi tanda kelelahan berlebih atau adanya masalah kesehatan seperti gangguan tidur, stres, atau depresi.
         Kebiasaan ini juga dapat menyebabkan rasa lesu, nyeri tubuh,
-        dan bahkan meningkatkan risiko diabetes dan obesitas.</string>
-    <string name="tips_tidur_berlebihan_1">Buat rutinitas pagi yang menyenangkan</string>
-    <string name="tips_tidur_berlebihan_2">Hindari tidur siang terlalu lama</string>
-    <string name="tips_tidur_berlebihan_3">Tetapkan waktu bangun yang konsisten, bahkan di akhir pekan</string>
+        dan bahkan meningkatkan risiko diabetes dan obesitas. Untuk itu aku punya tips nya nih:</string>
+    <string name="tips_tidur_berlebihan_1">1. Buat rutinitas pagi yang menyenangkan</string>
+    <string name="tips_tidur_berlebihan_2">2. Hindari tidur siang terlalu lama</string>
+    <string name="tips_tidur_berlebihan_3">3. Tetapkan waktu bangun yang konsisten, bahkan di akhir pekan</string>
 
     <string name="result_title">Hasil Kualitas Tidur</string>
     <string name="back_button">Kembali</string>

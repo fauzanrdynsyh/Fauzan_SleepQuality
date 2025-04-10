@@ -4,15 +4,20 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.fauzan0111.fauzan_sleepquality.screens.InfoScreen
 import com.fauzan0111.fauzan_sleepquality.screens.InputScreen
+import com.fauzan0111.fauzan_sleepquality.screens.MainScreen
 import com.fauzan0111.fauzan_sleepquality.screens.ResultScreen
 
 @Composable
 fun NavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = Screen.Input.route
+        startDestination = Screen.Main.route
     ) {
+        composable(route = Screen.Main.route) {
+            MainScreen(navController = navController)
+        }
         composable(route = Screen.Input.route) {
             InputScreen(navController = navController)
         }
@@ -20,5 +25,9 @@ fun NavGraph(navController: NavHostController) {
             val sleepHours = backStackEntry.arguments?.getString("sleepHours")?.toFloatOrNull() ?: 0f
             ResultScreen(sleepHours = sleepHours, navController = navController)
         }
+        composable(route = Screen.Info.route) {
+            InfoScreen(navController = navController)
+        }
+
     }
 }

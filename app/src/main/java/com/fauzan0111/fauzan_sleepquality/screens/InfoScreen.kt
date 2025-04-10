@@ -16,6 +16,12 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.DropdownMenuItem
 import android.content.res.Configuration
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.ui.draw.clip
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.fauzan0111.fauzan_sleepquality.R
 import com.fauzan0111.fauzan_sleepquality.model.SleepCategory
 import com.fauzan0111.fauzan_sleepquality.ui.theme.Fauzan_SleepQualityTheme
@@ -23,25 +29,65 @@ import com.fauzan0111.fauzan_sleepquality.ui.theme.Fauzan_SleepQualityTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InfoScreen() {
+fun InfoScreen(navController: NavController) {
     val defaultCategory = stringResource(R.string.tidur_cukup)
     var selectedCategory by remember { mutableStateOf(defaultCategory) }
+
     val categories = listOf(
         stringResource(R.string.tidur_cukup),
         stringResource(R.string.tidur_kurang),
         stringResource(R.string.tidur_berlebihan)
     )
 
+    val sleepCategories = listOf(
+        SleepCategory(
+            title = stringResource(R.string.tidur_cukup),
+            description = stringResource(R.string.desc_tidur_cukup),
+            tips = listOf(
+                Pair(R.string.tips_tidur_cukup_1, R.drawable.jadwal_tidur),
+                Pair(R.string.tips_tidur_cukup_2, R.drawable.lingkungan_tidur),
+                Pair(R.string.tips_tidur_cukup_3, R.drawable.hindari_kafein)
+            )
+        ),
+        SleepCategory(
+            title = stringResource(R.string.tidur_kurang),
+            description = stringResource(R.string.desc_tidur_kurang),
+            tips = listOf(
+                Pair(R.string.tips_tidur_kurang_1, R.drawable.tidur_awal),
+                Pair(R.string.tips_tidur_kurang_2, R.drawable.relaksasi),
+                Pair(R.string.tips_tidur_kurang_3, R.drawable.no_kafein)
+            )
+        ),
+        SleepCategory(
+            title = stringResource(R.string.tidur_berlebihan),
+            description = stringResource(R.string.desc_tidur_berlebihan),
+            tips = listOf(
+                Pair(R.string.tips_tidur_berlebihan_1, R.drawable.morning_routine),
+                Pair(R.string.tips_tidur_berlebihan_2, R.drawable.tidur_siang),
+                Pair(R.string.tips_tidur_berlebihan_3, R.drawable.terapkan_waktu)
+            )
+        )
+    )
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.info_tidur)) },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onPrimary
                 )
             )
         }
+
     ) { padding ->
         LazyColumn(
             modifier = Modifier
@@ -51,11 +97,12 @@ fun InfoScreen() {
         ) {
             item {
                 Image(
-                    painter = painterResource(id = R.drawable.sleep_info), // ganti dengan gambar kamu
+                    painter = painterResource(id = R.drawable.sleep_info),
                     contentDescription = stringResource(R.string.illustration_tidur),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(200.dp),
+                        .height(200.dp)
+                        .clip(RoundedCornerShape(12.dp)),
                     contentScale = ContentScale.Crop
                 )
 
@@ -102,71 +149,29 @@ fun InfoScreen() {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                when (selectedCategory) {
-                    stringResource(R.string.tidur_cukup) -> {
-                        val tips = listOf(
-                            Pair(R.string.tips_tidur_cukup_1, R.drawable.jadwal_tidur),
-                            Pair(R.string.tips_tidur_cukup_2, R.drawable.lingkungan_tidur),
-                            Pair(R.string.tips_tidur_cukup_3, R.drawable.hindari_kafein)
+                // Show selected category content
+                val selected = sleepCategories.find { it.title == selectedCategory }
+
+                selected?.let { category ->
+                    Text(
+                        text = category.description,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(bottom = 12.dp)
+                    )
+
+                    category.tips.forEach { (tipRes, imageRes) ->
+                        Text(text = stringResource(tipRes))
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Image(
+                            painter = painterResource(id = imageRes),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .width(120.dp)
+                                .height(120.dp)
+                                .clip(RoundedCornerShape(12.dp)),
+                            contentScale = ContentScale.Fit
                         )
-
-                        tips.forEach { (tipRes, imageRes) ->
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text(text = stringResource(tipRes))
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Image(
-                                painter = painterResource(id = imageRes),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(150.dp),
-                                contentScale = ContentScale.Crop
-                            )
-                        }
-                    }
-
-                    stringResource(R.string.tidur_kurang) -> {
-                        val tips = listOf(
-                            Pair(R.string.tips_tidur_kurang_1, R.drawable.tidur_awal),
-                            Pair(R.string.tips_tidur_kurang_2, R.drawable.relaksasi),
-                            Pair(R.string.tips_tidur_kurang_3, R.drawable.no_kafein)
-                        )
-
-                        tips.forEach { (tipRes, imageRes) ->
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text(text = stringResource(tipRes))
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Image(
-                                painter = painterResource(id = imageRes),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(150.dp),
-                                contentScale = ContentScale.Crop
-                            )
-                        }
-                    }
-
-                    stringResource(R.string.tidur_berlebihan) -> {
-                        val tips = listOf(
-                            Pair(R.string.tips_tidur_berlebihan_1, R.drawable.morning_routine),
-                            Pair(R.string.tips_tidur_berlebihan_2, R.drawable.tidur_siang),
-                            Pair(R.string.tips_tidur_berlebihan_3, R.drawable.terapkan_waktu)
-                        )
-
-                        tips.forEach { (tipRes, imageRes) ->
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text(text = stringResource(tipRes))
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Image(
-                                painter = painterResource(id = imageRes),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(150.dp),
-                                contentScale = ContentScale.Crop
-                            )
-                        }
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
 
@@ -176,23 +181,6 @@ fun InfoScreen() {
     }
 }
 
-val sleepCategories = listOf(
-    SleepCategory(
-        title = R.string.tidur_cukup,
-        description = R.string.desc_tidur_cukup,
-        tips = listOf(R.string.tips_tidur_cukup_1, R.string.tips_tidur_cukup_2)
-    ),
-    SleepCategory(
-        title = R.string.tidur_kurang,
-        description = R.string.desc_tidur_kurang,
-        tips = listOf(R.string.tips_tidur_kurang_1, R.string.tips_tidur_kurang_2)
-    ),
-    SleepCategory(
-        title = R.string.tidur_berlebihan,
-        description = R.string.desc_tidur_berlebihan,
-        tips = listOf(R.string.tips_tidur_berlebihan_1, R.string.tips_tidur_berlebihan_2)
-    )
-)
 
 @Preview(showBackground = true)
 @Preview(
@@ -202,7 +190,8 @@ val sleepCategories = listOf(
 )
 @Composable
 fun InfoScreenPreview() {
+    val navController = rememberNavController()
     Fauzan_SleepQualityTheme {
-        InfoScreen()
+        InfoScreen(navController = navController)
     }
 }
