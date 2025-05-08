@@ -6,9 +6,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.fauzan0111.fauzan_sleepquality.model.SleepRecord
 
-@Database(entities = [SleepRecord::class], version = 1)
+@Database(entities = [SleepRecord::class], version = 1, exportSchema = false)
 abstract class SleepDb : RoomDatabase() {
-    abstract fun sleepRecordDao() : SleepCategoryDao
+
+    abstract fun sleepRecordDao(): SleepRecordDao
 
     companion object {
         @Volatile
@@ -19,7 +20,7 @@ abstract class SleepDb : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     SleepDb::class.java,
-                    "sleep_database"
+                    "sleep_db"
                 ).build()
                 INSTANCE = instance
                 instance
