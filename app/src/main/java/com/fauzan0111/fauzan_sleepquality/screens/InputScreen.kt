@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavDestination.Companion.createRoute
 import androidx.navigation.compose.rememberNavController
 import com.fauzan0111.fauzan_sleepquality.R
 import com.fauzan0111.fauzan_sleepquality.ui.theme.Fauzan_SleepQualityTheme
@@ -124,15 +125,6 @@ fun InputScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Button(
-                onClick = {
-                    val sleepHours = calculateSleepHours(sleepTime, wakeTime)
-                    navController.navigate(Screen.Result.createRoute(sleepHours))
-                },
-                enabled = isValid
-            ) {
-                Text(stringResource(R.string.cek_kualitas_tidur))
-            }
         }
     }
 }
