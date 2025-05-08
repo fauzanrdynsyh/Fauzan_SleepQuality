@@ -1,126 +1,248 @@
 package com.fauzan0111.fauzan_sleepquality.screens
 
-import android.content.Context
-import android.content.Intent
 import android.content.res.Configuration
-import androidx.compose.foundation.Image
+import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Bedtime
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.WbSunny
+import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.fauzan0111.fauzan_sleepquality.R
 import com.fauzan0111.fauzan_sleepquality.ui.theme.Fauzan_SleepQualityTheme
+import com.fauzan0111.fauzan_sleepquality.util.SleepViewModelFactory
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ResultScreen(
-    sleepHours: Float,
-    navController: NavController
-) {
-    val qualityRes = when {
-        sleepHours < 6 -> R.string.tidur_kurang
-        sleepHours in 6.0..8.0 -> R.string.tidur_cukup
-        else -> R.string.tidur_berlebihan
-    }
-
-    val imageRes = when {
-        sleepHours < 6 -> R.drawable.kurang_tidur
-        sleepHours in 6.0..8.0 -> R.drawable.tidur_cukup
-        else -> R.drawable.tidur_berlebihan
-    }
-
+fun ResultScreen(id: Long? = null, navController: NavController) {
     val context = LocalContext.current
+    val factory = SleepViewModelFactory(context)
+    val viewModel: ResultViewModel = viewModel(factory = factory)
+
+    var tanggal by remember { mutableStateOf(getCurrentDate()) }
+    var waktuTidur by remember { mutableStateOf("22:00") }
+    var waktuBangun by remember { mutableStateOf("06:00") }
+    var kualitasTidur by remember { mutableIntStateOf(3) }
+
+
+    LaunchedEffect(Unit) {
+        if (id == null) return@LaunchedEffect
+        val data = viewModel.getById(id) ?: return@LaunchedEffect
+        tanggal = data.tanggal
+        waktuTidur = data.waktuTidur
+        waktuBangun = data.waktuBangun
+        kualitasTidur = data.kualitasTidur
+    }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.hasil_tidur)) },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(R.string.kembali)
+                            contentDescription = stringResource(R.string.kembali),
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
                 },
+                title = {
+                    if (id == null)
+                        Text(text = stringResource(id = R.string.tambah_data_tidur))
+                    else
+                        Text(text = stringResource(id = R.string.edit_data_tidur))
+                },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary
-                )
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary
+                ),
+                actions = {
+                    IconButton(onClick = {
+                        if (tanggal.isEmpty() || waktuTidur.isEmpty() || waktuBangun.isEmpty()) {
+                            Toast.makeText(context, R.string.invalid_data, Toast.LENGTH_LONG).show()
+                            return@IconButton
+                        }
+                        if (id == null) {
+                            viewModel.insert(tanggal, waktuTidur, waktuBangun, kualitasTidur)
+                        } else {
+                            viewModel.update(id, tanggal, waktuTidur, waktuBangun, kualitasTidur)
+                        }
+                        navController.popBackStack()
+                    }) {
+                        Icon(
+                            imageVector = Icons.Outlined.Check,
+                            contentDescription = stringResource(R.string.simpan),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                    if (id != null) {
+                        DeleteAction {
+                            viewModel.delete(id)
+                            navController.popBackStack()
+                        }
+                    }
+                }
             )
         }
     ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+        FormSleepQuality(
+            tanggal = tanggal,
+            onTanggalChange = { tanggal = it },
+            waktuTidur = waktuTidur,
+            onWaktuTidurChange = { waktuTidur = it },
+            waktuBangun = waktuBangun,
+            onWaktuBangunChange = { waktuBangun = it },
+            kualitasTidur = kualitasTidur,
+            onKualitasTidurChange = { kualitasTidur = it },
+            modifier = Modifier.padding(padding)
+        )
+    }
+}
+
+@Composable
+fun DeleteAction(delete: () -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+
+    IconButton(onClick = { expanded = true }) {
+        Icon(
+            imageVector = Icons.Filled.MoreVert,
+            contentDescription = stringResource(R.string.lainnya),
+            tint = MaterialTheme.colorScheme.primary
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
         ) {
-            Image(
-                painter = painterResource(id = imageRes),
-                contentDescription = null,
-                modifier = Modifier.size(200.dp)
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = stringResource(R.string.total_tidur, String.format("%.1f", sleepHours)),
-                style = MaterialTheme.typography.headlineSmall
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = stringResource(R.string.kualitas_tidur, stringResource(qualityRes)),
-                style = MaterialTheme.typography.bodyLarge
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Button(onClick = {
-                navController.navigate("info?from=result")
-            }) {
-                Text(stringResource(R.string.lihat_tips_tidur))
-            }
-
-            Spacer(modifier = Modifier.height(56.dp))
-
-            Button(
-                onClick = {
-                    shareData(
-                        context = context,
-                        message = context.getString(R.string.bagikan_template)
-                    )
+            DropdownMenuItem(
+                text = {
+                    Text(text = stringResource(id = R.string.hapus))
                 },
-                modifier = Modifier.padding(top = 8.dp),
-                contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
-            ) {
-                Text(text = stringResource(R.string.bagikan))
-            }
+                onClick = {
+                    expanded = false
+                    delete()
+                }
+            )
         }
     }
 }
 
-private fun shareData(context: Context, message: String) {
-    val shareIntent = Intent(Intent.ACTION_SEND).apply {
-        type = "text/plain"
-        putExtra(Intent.EXTRA_TEXT, message)
+@Composable
+fun FormSleepQuality(
+    tanggal: String, onTanggalChange: (String) -> Unit,
+    waktuTidur: String, onWaktuTidurChange: (String) -> Unit,
+    waktuBangun: String, onWaktuBangunChange: (String) -> Unit,
+    kualitasTidur: Int, onKualitasTidurChange: (Int) -> Unit,
+    modifier: Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        // Tanggal
+        OutlinedTextField(
+            value = tanggal,
+            onValueChange = { onTanggalChange(it) },
+            label = { Text(text = stringResource(R.string.tanggal)) },
+            singleLine = true,
+            leadingIcon = {
+                Icon(Icons.Default.DateRange, contentDescription = "Calendar")
+            },
+            readOnly = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    // Di sini Anda dapat menampilkan DatePicker dialog
+                    // Untuk implementasi sederhana kita gunakan TextField saja
+                }
+        )
+
+        // Waktu Tidur
+        OutlinedTextField(
+            value = waktuTidur,
+            onValueChange = { onWaktuTidurChange(it) },
+            label = { Text(text = stringResource(R.string.waktu_tidur)) },
+            singleLine = true,
+            leadingIcon = {
+                Icon(Icons.Default.Bedtime, contentDescription = "Bedtime")
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        // Waktu Bangun
+        OutlinedTextField(
+            value = waktuBangun,
+            onValueChange = { onWaktuBangunChange(it) },
+            label = { Text(text = stringResource(R.string.waktu_bangun)) },
+            singleLine = true,
+            leadingIcon = {
+                Icon(Icons.Default.WbSunny, contentDescription = "Wake up")
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        // Kualitas Tidur
+        Text(
+            text = stringResource(R.string.kualitas_tidur),
+            style = MaterialTheme.typography.bodyLarge
+        )
+
+        Slider(
+            value = kualitasTidur.toFloat(),
+            onValueChange = { onKualitasTidurChange(it.toInt()) },
+            valueRange = 1f..5f,
+            steps = 3,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(text = stringResource(R.string.buruk), style = MaterialTheme.typography.bodySmall)
+            Text(text = stringResource(R.string.sedang), style = MaterialTheme.typography.bodySmall)
+            Text(text = stringResource(R.string.baik), style = MaterialTheme.typography.bodySmall)
+        }
+
+        Text(
+            text = "${stringResource(R.string.nilai_kualitas)}: $kualitasTidur",
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
     }
-    if (shareIntent.resolveActivity(context.packageManager)!= null){
-        context.startActivity(shareIntent)
-    }
+}
+
+// Fungsi untuk mendapatkan tanggal saat ini dalam format yang sesuai
+private fun getCurrentDate(): String {
+    val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    return formatter.format(Date())
 }
 
 @Preview(showBackground = true)
@@ -133,7 +255,7 @@ private fun shareData(context: Context, message: String) {
 fun ResultScreenPreview() {
     val navController = rememberNavController()
     Fauzan_SleepQualityTheme {
-        ResultScreen(sleepHours = 7.5f, navController = navController)
+        ResultScreen(navController = navController)
     }
 }
 
