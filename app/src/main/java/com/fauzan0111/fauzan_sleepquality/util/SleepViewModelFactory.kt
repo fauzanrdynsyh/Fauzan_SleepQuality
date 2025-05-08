@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.fauzan0111.fauzan_sleepquality.database.SleepDb
-import com.fauzan0111.fauzan_sleepquality.database.SleepRecordDao
 import com.fauzan0111.fauzan_sleepquality.screens.ResultViewModel
 import com.fauzan0111.fauzan_sleepquality.screens.SleepViewModel
 
