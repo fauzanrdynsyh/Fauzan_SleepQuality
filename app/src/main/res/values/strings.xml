@@ -54,4 +54,25 @@
     <string name="kualitas_tidur">Kualitas: %1$s</string>
     <string name="bagikan">Bagikan</string>
     <string name="bagikan_template">Total Tidur: %1$.2f Jam\nKualitas:%2$s</string>
+    <string name="tambah_data"> tambah data</string>
+    <string name="list_kosong"> belum ada data</string>
+    <string name="list_tidur"> List Tidur</string>
+    <string name="tambah_data_tidur">Tambah Data Tidur</string>
+    <string name="edit_data_tidur">Edit Data Tidur</string>
+    <string name="simpan">Simpan</string>
+    <string name="lainnya">Lainnya</string>
+    <string name="hapus">Hapus</string>
+    <string name="invalid_data">Data tidak lengkap</string>
+    <string name="tanggal">Tanggal</string>
+    <string name="waktu_tidur">Waktu Tidur</string>
+    <string name="waktu_bangun">Waktu Bangun</string>
+    <string name="buruk">Buruk</string>
+    <string name="sedang">Sedang</string>
+    <string name="baik">Baik</string>
+    <string name="nilai_kualitas">Nilai</string>
+    <string name="catatan">Catatan</string>
+    <string name="sangat_baik">Sangat Baik</string>
+    <string name="sangat_buruk">Sangat Buruk</string>
+    <string name="data_tidur_kosong">Belum ada data tidur</string>
+
 </resources>
