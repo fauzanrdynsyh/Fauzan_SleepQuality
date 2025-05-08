@@ -32,7 +32,7 @@ compose-material-icons-extended = { group = "androidx.compose.material", name = 
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomRuntime"}
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomRuntime"}
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomRuntime"}
-
+androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx"}
 
 
 [plugins]
