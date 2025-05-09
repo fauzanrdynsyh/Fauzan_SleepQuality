@@ -70,7 +70,7 @@
     <string name="buruk">Poor</string>
     <string name="sedang">Fair</string>
     <string name="baik">Good</string>
-    <string name="nilai_kualitas">Rating</string>
+    <string name="nilai_kualitas">mark: %1$s</string>
     <string name="catatan">Notes</string>
     <string name="sangat_baik">Very Good</string>
     <string name="sangat_buruk">Very Poor</string>
