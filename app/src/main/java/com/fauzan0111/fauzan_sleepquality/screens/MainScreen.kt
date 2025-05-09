@@ -9,11 +9,14 @@ import androidx.compose.material.icons.filled.Bedtime
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -26,11 +29,18 @@ import androidx.navigation.compose.rememberNavController
 import com.fauzan0111.fauzan_sleepquality.R
 import com.fauzan0111.fauzan_sleepquality.nav.Screen
 import com.fauzan0111.fauzan_sleepquality.ui.theme.Fauzan_SleepQualityTheme
+import com.fauzan0111.fauzan_sleepquality.util.SettingsDataStore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(navController: NavController) {
+    val dataStore = SettingsDataStore(LocalContext.current)
+    val tema by dataStore.getTheme().collectAsState(initial = false)
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -48,6 +58,20 @@ fun MainScreen(navController: NavController) {
                     )
                 },
                 actions = {
+                    IconButton(onClick = {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            dataStore.setTheme(!tema)
+                        }
+                    }) {
+                        Icon(
+                            painter = painterResource(
+                                if (tema) R.drawable.baseline_light_mode_24
+                                else R.drawable.baseline_dark_mode_24
+                            ),
+                            contentDescription = null,
+                            tint = Color.White
+                        )
+                    }
                     IconButton(
                         onClick = {
                             navController.navigate("about")

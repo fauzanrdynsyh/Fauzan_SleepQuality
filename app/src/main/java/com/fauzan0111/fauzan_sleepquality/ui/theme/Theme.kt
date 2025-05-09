@@ -50,23 +50,12 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun Fauzan_SleepQualityTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    temaGelap: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
-
+    val warnaSkema = if (temaGelap) DarkColorScheme else LightColorScheme
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = warnaSkema,
         typography = Typography,
         content = content
     )

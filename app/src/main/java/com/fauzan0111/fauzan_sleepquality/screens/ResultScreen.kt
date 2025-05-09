@@ -46,10 +46,15 @@ fun ResultScreen(id: Long? = null, navController: NavController) {
     val viewModel: ResultViewModel = viewModel(factory = factory)
 
     var tanggal by remember { mutableStateOf(getCurrentDate()) }
-    var waktuTidur by remember { mutableStateOf("22.00") }
-    var waktuBangun by remember { mutableStateOf("06.00") }
+    var waktuTidur by remember { mutableStateOf("") }
+    var waktuBangun by remember { mutableStateOf("") }
     var kualitasTidur by remember { mutableIntStateOf(3) }
     var showDialog by remember { mutableStateOf(false) }
+
+    val timePattern = Regex("^([0-1]\\d|2[0-3])\\.(0\\d|[1-5]\\d)$")
+    val isTidurValid = timePattern.matches(waktuTidur)
+    val isBangunValid = timePattern.matches(waktuBangun)
+    val isInputValid = isTidurValid && isBangunValid
 
 
     LaunchedEffect(Unit) {
@@ -85,7 +90,7 @@ fun ResultScreen(id: Long? = null, navController: NavController) {
                 ),
                 actions = {
                     IconButton(onClick = {
-                        if (tanggal.isEmpty() || waktuTidur.isEmpty() || waktuBangun.isEmpty()) {
+                        if (tanggal.isEmpty() || waktuTidur.isEmpty() || waktuBangun.isEmpty() || !isInputValid) {
                             Toast.makeText(context, R.string.invalid_data, Toast.LENGTH_LONG).show()
                             return@IconButton
                         }
@@ -120,6 +125,8 @@ fun ResultScreen(id: Long? = null, navController: NavController) {
             onWaktuBangunChange = { waktuBangun = it },
             kualitasTidur = kualitasTidur,
             onKualitasTidurChange = { kualitasTidur = it },
+            isTidurValid = isTidurValid,
+            isBangunValid = isBangunValid,
             modifier = Modifier.padding(padding)
         )
 
@@ -167,6 +174,8 @@ fun FormSleepQuality(
     waktuTidur: String, onWaktuTidurChange: (String) -> Unit,
     waktuBangun: String, onWaktuBangunChange: (String) -> Unit,
     kualitasTidur: Int, onKualitasTidurChange: (Int) -> Unit,
+    isTidurValid: Boolean,
+    isBangunValid: Boolean,
     modifier: Modifier
 ) {
     Column(
@@ -199,24 +208,40 @@ fun FormSleepQuality(
             value = waktuTidur,
             onValueChange = { onWaktuTidurChange(it) },
             label = { Text(text = stringResource(R.string.waktu_tidur)) },
+            isError = waktuTidur.isNotEmpty() && !isTidurValid,
             singleLine = true,
             leadingIcon = {
                 Icon(Icons.Default.Bedtime, contentDescription = "Bedtime")
             },
             modifier = Modifier.fillMaxWidth()
         )
+        if (waktuTidur.isNotEmpty() && !isTidurValid) {
+            Text(
+                text = "Format salah (contoh: 22.30)",
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
 
         // Waktu Bangun
         OutlinedTextField(
             value = waktuBangun,
             onValueChange = { onWaktuBangunChange(it) },
             label = { Text(text = stringResource(R.string.waktu_bangun)) },
+            isError = waktuBangun.isNotEmpty() && !isBangunValid,
             singleLine = true,
             leadingIcon = {
                 Icon(Icons.Default.WbSunny, contentDescription = "Wake up")
             },
             modifier = Modifier.fillMaxWidth()
         )
+        if (waktuBangun.isNotEmpty() && !isBangunValid) {
+            Text(
+                text = "Format salah (contoh: 06.15)",
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
 
         // Kualitas Tidur
         Text(
