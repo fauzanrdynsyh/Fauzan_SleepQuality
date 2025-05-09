@@ -104,7 +104,7 @@ fun MainScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(32.dp))
 
             Button(
-                onClick = { navController.navigate(Screen.TambahDataTidur.route) },
+                onClick = { navController.navigate(Screen.ListScreen.route) },
                 modifier = Modifier
                     .fillMaxWidth(),
                 shape = RoundedCornerShape(50)

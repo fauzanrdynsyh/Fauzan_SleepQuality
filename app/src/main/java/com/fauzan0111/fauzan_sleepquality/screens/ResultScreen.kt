@@ -37,6 +37,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+const val KEY_ID_DATA = "id"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ResultScreen(id: Long? = null, navController: NavController) {
@@ -45,8 +46,8 @@ fun ResultScreen(id: Long? = null, navController: NavController) {
     val viewModel: ResultViewModel = viewModel(factory = factory)
 
     var tanggal by remember { mutableStateOf(getCurrentDate()) }
-    var waktuTidur by remember { mutableStateOf("22:00") }
-    var waktuBangun by remember { mutableStateOf("06:00") }
+    var waktuTidur by remember { mutableStateOf("22.00") }
+    var waktuBangun by remember { mutableStateOf("06.00") }
     var kualitasTidur by remember { mutableIntStateOf(3) }
 
 
@@ -210,7 +211,7 @@ fun FormSleepQuality(
 
         // Kualitas Tidur
         Text(
-            text = stringResource(R.string.kualitas_tidur),
+            text = stringResource(R.string.kualitas_tidur, kualitasTidur.toFloat()),
             style = MaterialTheme.typography.bodyLarge
         )
 
@@ -232,7 +233,7 @@ fun FormSleepQuality(
         }
 
         Text(
-            text = "${stringResource(R.string.nilai_kualitas)}: $kualitasTidur",
+            text = stringResource(R.string.kualitas_tidur, kualitasTidur.toFloat()),
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
