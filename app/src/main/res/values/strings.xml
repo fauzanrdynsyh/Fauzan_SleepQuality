@@ -77,4 +77,6 @@
     <string name="pesan_hapus">Hapus data ini?</string>
     <string name="tombol_hapus">Hapus</string>
     <string name="tombol_batal">Batal</string>
+    <string name="list">tampilan List</string>
+    <string name="grid">tampilan grid</string>
 </resources>
