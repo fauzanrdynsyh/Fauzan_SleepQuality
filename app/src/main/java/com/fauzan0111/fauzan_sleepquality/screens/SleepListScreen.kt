@@ -1,6 +1,7 @@
 package com.fauzan0111.fauzan_sleepquality.screens
 
 import android.content.res.Configuration
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,10 +14,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Bedtime
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
@@ -33,6 +40,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -46,12 +54,19 @@ import com.fauzan0111.fauzan_sleepquality.R
 import com.fauzan0111.fauzan_sleepquality.model.SleepRecord
 import com.fauzan0111.fauzan_sleepquality.nav.Screen
 import com.fauzan0111.fauzan_sleepquality.ui.theme.Fauzan_SleepQualityTheme
+import com.fauzan0111.fauzan_sleepquality.util.SettingsDataStore
 import com.fauzan0111.fauzan_sleepquality.util.SleepViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SleepListScreen(navController: NavHostController) {
+    val datastore = SettingsDataStore(LocalContext.current)
+    val showList by datastore.layoutFlow.collectAsState(true)
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -70,7 +85,26 @@ fun SleepListScreen(navController: NavHostController) {
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary,
-                )
+                ),
+                actions = {
+                        IconButton(onClick = {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                datastore.saveLayout(!showList)
+                            }
+                        }) {
+                            Icon(
+                                painter = painterResource(
+                                    if (showList) R.drawable.baseline_grid_view_24
+                                    else R.drawable.baseline_format_list_bulleted_24
+                                ),
+                                contentDescription = stringResource(
+                                    if (showList) R.string.grid
+                                    else R.string.list
+                                ),
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                }
             )
         },
         floatingActionButton = {
@@ -88,6 +122,7 @@ fun SleepListScreen(navController: NavHostController) {
         }
     ) { innerPadding ->
         ScreenContent(
+            showList,
             modifier = Modifier.padding(innerPadding),
             navController = navController,
 
@@ -96,7 +131,7 @@ fun SleepListScreen(navController: NavHostController) {
 }
 
 @Composable
-fun ScreenContent(modifier: Modifier = Modifier, navController: NavController ) {
+fun ScreenContent(showList: Boolean, modifier: Modifier = Modifier, navController: NavController ) {
     val context = LocalContext.current
     val factory = SleepViewModelFactory(context)
     val viewModel: SleepViewModel = viewModel(factory = factory)
@@ -122,18 +157,36 @@ fun ScreenContent(modifier: Modifier = Modifier, navController: NavController ) 
                 style = MaterialTheme.typography.titleMedium
             )
         }
-    } else {
-        LazyColumn(
-            modifier = modifier.fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 84.dp)
-        ) {
-            items(data) { sleepData ->
-                SleepQualityListItem(sleepData = sleepData) {
-                    navController.navigate(Screen.EditDataTidur.withId(sleepData.id))
+    }
+        else {
+            if (showList) {
+                LazyColumn(
+                    modifier = modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(bottom = 84.dp)
+                ) {
+                    items(data) { sleepData ->
+                        SleepQualityListItem(sleepData = sleepData) {
+                            navController.navigate(Screen.EditDataTidur.withId(sleepData.id))
+                        }
+                        HorizontalDivider()
+                    }
                 }
-                HorizontalDivider()
             }
-        }
+        else {
+                LazyVerticalStaggeredGrid(
+                    modifier = modifier.fillMaxSize(),
+                    columns = StaggeredGridCells.Fixed(2),
+                    verticalItemSpacing = 8.dp,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(8.dp,8.dp,8.dp,84.dp)
+                ) {
+                    items(data) {
+                        GridItem(sleepData = it) {
+                            navController.navigate(Screen.EditDataTidur.withId(it.id))
+                        }
+                    }
+                }
+            }
     }
 }
 
@@ -164,6 +217,41 @@ fun SleepQualityListItem(sleepData: SleepRecord, onClick: () -> Unit) {
             ),
             style = MaterialTheme.typography.bodyMedium
         )
+    }
+}
+
+@Composable
+fun GridItem(sleepData: SleepRecord, onClick: () -> Unit){
+    Card(
+        modifier = Modifier.fillMaxWidth().clickable { onClick() },
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+        ),
+        border = BorderStroke(1.dp, DividerDefaults.color)
+    ) {
+        Column(
+            modifier = Modifier.padding(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            Text(
+                text = sleepData.tanggal,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "${sleepData.waktuTidur} → ${sleepData.waktuBangun}",
+                maxLines = 4,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                text = stringResource(
+                    R.string.total_tidur,
+                    sleepData.durasiTidur
+                ),
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
     }
 }
 
