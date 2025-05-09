@@ -198,8 +198,6 @@ fun FormSleepQuality(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable {
-                    // Di sini Anda dapat menampilkan DatePicker dialog
-                    // Untuk implementasi sederhana kita gunakan TextField saja
                 }
         )
 
