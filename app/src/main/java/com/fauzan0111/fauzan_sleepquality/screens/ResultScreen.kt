@@ -49,6 +49,7 @@ fun ResultScreen(id: Long? = null, navController: NavController) {
     var waktuTidur by remember { mutableStateOf("22.00") }
     var waktuBangun by remember { mutableStateOf("06.00") }
     var kualitasTidur by remember { mutableIntStateOf(3) }
+    var showDialog by remember { mutableStateOf(false) }
 
 
     LaunchedEffect(Unit) {
@@ -103,8 +104,7 @@ fun ResultScreen(id: Long? = null, navController: NavController) {
                     }
                     if (id != null) {
                         DeleteAction {
-                            viewModel.delete(id)
-                            navController.popBackStack()
+                            showDialog = true
                         }
                     }
                 }
@@ -122,6 +122,15 @@ fun ResultScreen(id: Long? = null, navController: NavController) {
             onKualitasTidurChange = { kualitasTidur = it },
             modifier = Modifier.padding(padding)
         )
+
+        if (id != null && showDialog) {
+            DisplayAlertDialog(
+                onDismissRequest = { showDialog = false}) {
+                showDialog = false
+                viewModel.delete(id)
+                navController.popBackStack()
+            }
+        }
     }
 }
 

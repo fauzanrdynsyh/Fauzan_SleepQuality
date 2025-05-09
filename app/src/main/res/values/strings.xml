@@ -74,5 +74,7 @@
     <string name="sangat_baik">Sangat Baik</string>
     <string name="sangat_buruk">Sangat Buruk</string>
     <string name="data_tidur_kosong">Belum ada data tidur</string>
-
+    <string name="pesan_hapus">Hapus data ini?</string>
+    <string name="tombol_hapus">Hapus</string>
+    <string name="tombol_batal">Batal</string>
 </resources>
