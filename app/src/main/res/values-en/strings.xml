@@ -75,4 +75,7 @@
     <string name="sangat_baik">Very Good</string>
     <string name="sangat_buruk">Very Poor</string>
     <string name="data_tidur_kosong">No sleep data yet</string>
+    <string name="pesan_hapus">Delete this data?</string>
+    <string name="tombol_hapus">Delete</string>
+    <string name="tombol_batal">Cancel</string>
 </resources>
