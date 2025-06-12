@@ -8,6 +8,7 @@ sealed class Screen(val route: String) {
     data object TambahDataTidur : Screen("edit")
     data object Info : Screen("info")
     data object About : Screen("about")
+    data object GaleriTidur: Screen("galeri")
     data object EditDataTidur : Screen("edit/{$KEY_ID_DATA}") {
         fun withId(id: Long): String {
             return "edit/$id"

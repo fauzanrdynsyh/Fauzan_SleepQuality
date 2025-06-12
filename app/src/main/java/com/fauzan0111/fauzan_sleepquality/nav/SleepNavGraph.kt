@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.fauzan0111.fauzan_sleepquality.screens.AboutScreen
+import com.fauzan0111.fauzan_sleepquality.screens.GaleriScreen
 import com.fauzan0111.fauzan_sleepquality.screens.InfoScreen
 import com.fauzan0111.fauzan_sleepquality.screens.KEY_ID_DATA
 import com.fauzan0111.fauzan_sleepquality.screens.MainScreen
@@ -51,5 +52,10 @@ fun NavGraph(navController: NavHostController) {
             val from = backStackEntry.arguments?.getString("from") ?: "main"
             InfoScreen(navController, from)
         }
+
+        composable(route = Screen.GaleriTidur.route) {
+            GaleriScreen(navController = navController)
+        }
+
     }
 }

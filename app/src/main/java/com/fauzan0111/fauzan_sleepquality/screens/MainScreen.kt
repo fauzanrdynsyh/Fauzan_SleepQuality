@@ -142,6 +142,20 @@ fun MainScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
+                onClick = { navController.navigate(Screen.GaleriTidur.route) },
+                modifier = Modifier
+                    .fillMaxWidth(),
+                shape = RoundedCornerShape(50)
+            ) {
+                Text(
+                    text = stringResource(R.string.galeri_tidur),
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
                 onClick = { navController.navigate(Screen.Info.route) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(50)
