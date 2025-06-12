@@ -80,4 +80,7 @@
     <string name="tombol_batal">Cancel</string>
     <string name="list">List view</string>
     <string name="grid">Grid view</string>
+    <string name="galeri">Sleep Gallery</string>
+    <string name="gambar">Image %1$s</string>
+    <string name="galeri_tidur">Sleep Gallery</string>
 </resources>

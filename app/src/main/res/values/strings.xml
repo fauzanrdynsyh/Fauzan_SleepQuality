@@ -79,4 +79,7 @@
     <string name="tombol_batal">Batal</string>
     <string name="list">tampilan List</string>
     <string name="grid">tampilan grid</string>
+    <string name="galeri"> Galeri Tidur</string>
+    <string name="gambar"> Gambar %1$s</string>
+    <string name="galeri_tidur"> Galeri Tidur</string>
 </resources>
