@@ -85,4 +85,7 @@
     <string name="error"> Gagal Memuat Data Koneksi error.</string>
     <string name="coba_lagi"> Coba Lagi</string>
     <string name="profil"> Profil </string>
+    <string name="tutup"> Tutup </string>
+    <string name="logout">Logout</string>
+
 </resources>

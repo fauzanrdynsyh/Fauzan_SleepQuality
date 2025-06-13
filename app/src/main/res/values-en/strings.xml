@@ -86,4 +86,6 @@
     <string name="error">Failed to load data. Connection error.</string>
     <string name="coba_lagi">Try Again</string>
     <string name="profil"> Profile </string>
+    <string name="tutup"> Close </string>
+    <string name="logout">Logout</string>
 </resources>
