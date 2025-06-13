@@ -82,4 +82,6 @@
     <string name="galeri"> Galeri Tidur</string>
     <string name="gambar"> Gambar %1$s</string>
     <string name="galeri_tidur"> Galeri Tidur</string>
+    <string name="error"> Gagal Memuat Data Koneksi error.</string>
+    <string name="coba_lagi"> Coba Lagi</string>
 </resources>
