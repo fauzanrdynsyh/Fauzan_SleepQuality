@@ -87,5 +87,6 @@
     <string name="profil"> Profil </string>
     <string name="tutup"> Tutup </string>
     <string name="logout">Logout</string>
+    <string name="batal"> Batal </string>
 
 </resources>

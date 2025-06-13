@@ -10,6 +10,7 @@ import android.graphics.ImageDecoder
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -93,10 +94,15 @@ fun GaleriScreen(navController: NavController){
     val user by dataStore.userFlow.collectAsState(User())
 
     var showDialog by remember { mutableStateOf(false) }
+    var showTidurDialog by remember { mutableStateOf(false) }
+
+    val viewModel: GaleriViewModel = viewModel()
+    val errorMessage by viewModel.errorMessage
 
     var bitmap: Bitmap? by remember { mutableStateOf(null) }
     val launcher = rememberLauncherForActivityResult(CropImageContract()) {
         bitmap = getCroppedImage(context.contentResolver, it)
+        if (bitmap != null) showTidurDialog = true
     }
 
     Scaffold (
@@ -154,7 +160,7 @@ fun GaleriScreen(navController: NavController){
             }
         }
     ) { innerPadding ->
-        ScreenContent(Modifier.padding(innerPadding))
+        ScreenContent(viewModel,Modifier.padding(innerPadding))
 
         if (showDialog) {
             ProfilDialog(
@@ -164,12 +170,25 @@ fun GaleriScreen(navController: NavController){
                 showDialog = false
             }
         }
+
+        if (showTidurDialog) {
+            TidurDialog(
+                bitmap = bitmap,
+                onDismissRequest = {showTidurDialog = false}) { waktuTidur, waktuBangun ->
+                viewModel.saveData(user.email, waktuTidur,waktuBangun,bitmap!!)
+                showTidurDialog = false
+            }
+        }
+
+        if (errorMessage != null){
+            Toast.makeText(context,errorMessage,Toast.LENGTH_LONG).show()
+            viewModel.clearMessage()
+        }
     }
 }
 
 @Composable
-fun ScreenContent(modifier: Modifier = Modifier){
-    val viewModel: GaleriViewModel = viewModel()
+fun ScreenContent(viewModel: GaleriViewModel,modifier: Modifier = Modifier){
     val data by viewModel.data
     val status by viewModel.status.collectAsState()
 
@@ -227,7 +246,7 @@ fun ListTidur(tidur: Tidur) {
                 .data(TidurApi.getTidurUrl(tidur.imageId))
                 .crossfade(true)
                 .build(),
-            contentDescription = stringResource(R.string.gambar, tidur.waktu_tidur),
+            contentDescription = stringResource(R.string.gambar, tidur.waktuTidur),
             contentScale = ContentScale.Crop,
             placeholder = painterResource(id = R.drawable.loading_img),
             error = painterResource(id = R.drawable.baseline_broken_image_24),
@@ -243,12 +262,12 @@ fun ListTidur(tidur: Tidur) {
                 .padding(4.dp)
         ) {
             Text(
-                text = tidur.waktu_tidur,
+                text = tidur.waktuTidur,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
             )
             Text(
-                text = tidur.waktu_bangun,
+                text = tidur.waktuBangun,
                 fontStyle = FontStyle.Italic,
                 fontSize = 14.sp,
                 color = Color.White
