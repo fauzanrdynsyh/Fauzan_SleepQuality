@@ -29,6 +29,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -257,6 +258,13 @@ fun ScreenContent(viewModel: GaleriViewModel,email: String ,modifier: Modifier =
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(text = stringResource(id = R.string.error))
+                Button(
+                    onClick = {viewModel.retrieveData(email)},
+                    modifier = Modifier.padding(top = 16.dp),
+                    contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
+                ) {
+                    Text(text = stringResource(R.string.coba_lagi))
+                }
             }
         }
     }
