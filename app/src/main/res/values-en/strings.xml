@@ -85,4 +85,5 @@
     <string name="galeri_tidur">Sleep Gallery</string>
     <string name="error">Failed to load data. Connection error.</string>
     <string name="coba_lagi">Try Again</string>
+    <string name="profil"> Profile </string>
 </resources>

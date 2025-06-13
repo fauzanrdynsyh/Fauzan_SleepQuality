@@ -28,7 +28,7 @@ object TidurApi {
     }
 
     fun getTidurUrl(imageId: String): String {
-        return "${BASE_URL}image.php?id=$imageId"
+        return "${BASE_URL}image?id=$imageId"
     }
 
     enum class ApiStatus { LOADING, SUCCESS, FAILED}
