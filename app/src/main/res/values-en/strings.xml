@@ -88,6 +88,6 @@
     <string name="profil"> Profile </string>
     <string name="tutup"> Close </string>
     <string name="logout">Logout</string>
-    <string name="batal"> Batal </string>
-
+    <string name="batal"> Cancel </string>
+    <string name="hapus_gambar">Delete Image</string>
 </resources>
