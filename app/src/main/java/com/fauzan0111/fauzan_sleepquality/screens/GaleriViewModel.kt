@@ -26,11 +26,11 @@ class GaleriViewModel : ViewModel() {
     var errorMessage = mutableStateOf<String?>(null)
         private set
 
-    fun retrieveData() {
+    fun retrieveData(email: String) {
         viewModelScope.launch(Dispatchers.IO) {
             status.value = TidurApi.ApiStatus.LOADING
             try {
-                data.value = TidurApi.service.getTidur()
+                data.value = TidurApi.service.getTidur(email)
                 status.value = TidurApi.ApiStatus.SUCCESS
             } catch (e: Exception) {
                 Log.d("GaleriViewModel", "Failure: ${e.message}")
@@ -39,17 +39,17 @@ class GaleriViewModel : ViewModel() {
         }
     }
 
-    fun saveData(email: String, waktu_tidur: String, waktu_bangun: String, bitmap: Bitmap){
+    fun saveData(email: String, waktuTidur: String, waktuBangun: String, bitmap: Bitmap){
         viewModelScope.launch(Dispatchers.IO){
             try {
                 val result = TidurApi.service.tambahTidur(
                     email,
-                    waktu_tidur.toRequestBody("text/plain".toMediaTypeOrNull()),
-                    waktu_bangun.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    waktuTidur.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    waktuBangun.toRequestBody("text/plain".toMediaTypeOrNull()),
                     bitmap.toMultipartBody()
                 )
                 if (result.status == "success")
-                    retrieveData()
+                    retrieveData(email)
                 else
                     throw Exception(result.message)
             } catch (e: Exception) {

@@ -39,6 +39,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -160,7 +161,7 @@ fun GaleriScreen(navController: NavController){
             }
         }
     ) { innerPadding ->
-        ScreenContent(viewModel,Modifier.padding(innerPadding))
+        ScreenContent(viewModel,user.email,Modifier.padding(innerPadding))
 
         if (showDialog) {
             ProfilDialog(
@@ -188,9 +189,13 @@ fun GaleriScreen(navController: NavController){
 }
 
 @Composable
-fun ScreenContent(viewModel: GaleriViewModel,modifier: Modifier = Modifier){
+fun ScreenContent(viewModel: GaleriViewModel,email: String ,modifier: Modifier = Modifier){
     val data by viewModel.data
     val status by viewModel.status.collectAsState()
+
+    LaunchedEffect(email) {
+        viewModel.retrieveData(email)
+    }
 
     when (status) {
         TidurApi.ApiStatus.LOADING -> {
@@ -222,7 +227,7 @@ fun ScreenContent(viewModel: GaleriViewModel,modifier: Modifier = Modifier){
             ) {
                 Text(text = stringResource(id = R.string.error))
                 Button(
-                    onClick = { viewModel.retrieveData() },
+                    onClick = { viewModel.retrieveData(email) },
                     modifier = Modifier.padding(top = 16.dp),
                     contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
                 ) {

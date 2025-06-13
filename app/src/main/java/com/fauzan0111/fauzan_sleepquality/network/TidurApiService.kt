@@ -26,7 +26,9 @@ private val retrofit = Retrofit.Builder()
 
 interface TidurApiService {
     @GET("sleep")
-    suspend fun getTidur() : List<Tidur>
+    suspend fun getTidur(
+        @Header("Authorization") email: String
+    ) : List<Tidur>
 
     @Multipart
     @POST("sleep")
@@ -37,10 +39,6 @@ interface TidurApiService {
         @Part image: MultipartBody.Part
     ): OpStatus
 }
-
-
-
-
 
 object TidurApi {
     val service: TidurApiService by lazy {
