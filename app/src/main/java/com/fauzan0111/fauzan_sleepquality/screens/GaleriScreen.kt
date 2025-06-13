@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,7 +28,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -97,6 +98,9 @@ fun GaleriScreen(navController: NavController){
     var showDialog by remember { mutableStateOf(false) }
     var showTidurDialog by remember { mutableStateOf(false) }
 
+    var showEditTidurDialog by remember { mutableStateOf(false) } // Mengontrol visibilitas dialog edit
+    var tidurToEdit by remember { mutableStateOf<Tidur?>(null) } // Menyimpan data tidur yang akan diedit
+
     val viewModel: GaleriViewModel = viewModel()
     val errorMessage by viewModel.errorMessage
 
@@ -147,7 +151,7 @@ fun GaleriScreen(navController: NavController){
             FloatingActionButton(onClick = {
                 val options = CropImageContractOptions(
                     null, CropImageOptions(
-                        imageSourceIncludeGallery = false,
+                        imageSourceIncludeGallery = true,
                         imageSourceIncludeCamera = true,
                         fixAspectRatio = true
                     )
@@ -161,7 +165,10 @@ fun GaleriScreen(navController: NavController){
             }
         }
     ) { innerPadding ->
-        ScreenContent(viewModel,user.email,Modifier.padding(innerPadding))
+        ScreenContent(viewModel,user.email,Modifier.padding(innerPadding), onEditClick = { tidur ->
+            tidurToEdit = tidur
+            showEditTidurDialog = true
+        })
 
         if (showDialog) {
             ProfilDialog(
@@ -181,6 +188,20 @@ fun GaleriScreen(navController: NavController){
             }
         }
 
+        if (showEditTidurDialog && tidurToEdit != null) {
+            EditDialog(
+                tidur = tidurToEdit!!, // Pastikan tidurToEdit tidak null
+                onDismissRequest = {
+                    showEditTidurDialog = false // Tutup dialog saat dismiss
+                    tidurToEdit = null // Reset data yang diedit
+                }
+            ) { id, waktuTidur, waktuBangun, newBitmap -> // Callback dari dialog saat simpan perubahan
+                viewModel.updateData(user.email, id, waktuTidur, waktuBangun, newBitmap)
+                showEditTidurDialog = false // Tutup dialog setelah update
+                tidurToEdit = null // Reset data yang diedit
+            }
+        }
+
         if (errorMessage != null){
             Toast.makeText(context,errorMessage,Toast.LENGTH_LONG).show()
             viewModel.clearMessage()
@@ -189,7 +210,7 @@ fun GaleriScreen(navController: NavController){
 }
 
 @Composable
-fun ScreenContent(viewModel: GaleriViewModel,email: String ,modifier: Modifier = Modifier){
+fun ScreenContent(viewModel: GaleriViewModel,email: String ,modifier: Modifier = Modifier, onEditClick: (Tidur) -> Unit){
     val data by viewModel.data
     val status by viewModel.status.collectAsState()
 
@@ -215,7 +236,17 @@ fun ScreenContent(viewModel: GaleriViewModel,email: String ,modifier: Modifier =
                 columns = GridCells.Fixed(2),
                 contentPadding = PaddingValues(bottom = 80.dp)
             ) {
-                items(data) { ListTidur(tidur = it) }
+                items(data) { tidurItem ->
+                    ListTidur(
+                        tidur = tidurItem,
+                        onDeleteClick = {tidurId ->
+                            viewModel.deleteData(email, tidurId)
+                        },
+                        onEditClick = {tidur ->
+                            onEditClick(tidur)
+                        }
+                    )
+                }
             }
         }
 
@@ -226,22 +257,16 @@ fun ScreenContent(viewModel: GaleriViewModel,email: String ,modifier: Modifier =
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(text = stringResource(id = R.string.error))
-                Button(
-                    onClick = { viewModel.retrieveData(email) },
-                    modifier = Modifier.padding(top = 16.dp),
-                    contentPadding = PaddingValues(horizontal = 32.dp, vertical = 16.dp)
-                ) {
-                    Text(text = stringResource(id = R.string.coba_lagi))
-                }
             }
         }
     }
 }
 
 @Composable
-fun ListTidur(tidur: Tidur) {
+fun ListTidur(tidur: Tidur, onDeleteClick: (String) -> Unit, onEditClick: (Tidur) -> Unit) {
     Box(
         modifier = Modifier
+            .clickable { onEditClick(tidur) }
             .padding(4.dp)
             .border(1.dp, Color.Gray),
         contentAlignment = Alignment.BottomCenter
@@ -276,6 +301,18 @@ fun ListTidur(tidur: Tidur) {
                 fontStyle = FontStyle.Italic,
                 fontSize = 14.sp,
                 color = Color.White
+            )
+        }
+        IconButton(
+            onClick = { onDeleteClick(tidur.id) },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(8.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Delete,
+                contentDescription = stringResource(R.string.hapus),
+                tint = Color.White
             )
         }
     }
@@ -333,7 +370,7 @@ private suspend fun signOut(context: Context, dataStore: UserDataStore) {
     }
 }
 
-private fun getCroppedImage(
+fun getCroppedImage(
     resolver: ContentResolver,
     result: CropImageView.CropResult
 ): Bitmap? {

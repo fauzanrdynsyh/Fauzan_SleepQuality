@@ -7,11 +7,13 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Query
 
 private const val BASE_URL = "https://sleep-api.bagasaldianata.my.id/api/"
 
@@ -34,10 +36,28 @@ interface TidurApiService {
     @POST("sleep")
     suspend fun tambahTidur(
         @Header("Authorization") email: String,
-        @Part("waktuTidur") waktuTidur: RequestBody,
-        @Part("waktuBangun") waktuBangun: RequestBody,
-        @Part image: MultipartBody.Part
+        @Part("waktu_tidur") waktuTidur: RequestBody,
+        @Part("waktu_bangun") waktuBangun: RequestBody,
+        @Part imageId: MultipartBody.Part
     ): OpStatus
+
+    @DELETE("sleep")
+    suspend fun hapusTidur(
+        @Header("Authorization") email: String,
+        @Query("id") id: String
+    ): OpStatus
+
+    @Multipart
+    @POST("sleep")
+    suspend fun updateTidur(
+        @Header("Authorization") email: String,
+        @Query("id") id: String,
+        @Part("_method") method: RequestBody,
+        @Part("waktu_tidur") waktuTidur: RequestBody,
+        @Part("waktu_bangun") waktuBangun: RequestBody,
+        @Part imageId: MultipartBody.Part?
+    ): Tidur
+
 }
 
 object TidurApi {

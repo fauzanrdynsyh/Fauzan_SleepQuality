@@ -59,6 +59,48 @@ class GaleriViewModel : ViewModel() {
         }
     }
 
+    fun deleteData(email: String, id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val result = TidurApi.service.hapusTidur(email, id) // Panggil hapusTidur
+                if (result.status == "success") {
+                    retrieveData(email) // Muat ulang data setelah penghapusan berhasil
+                    errorMessage.value = "Data berhasil dihapus!" // Pesan sukses (opsional)
+                } else {
+                    throw Exception(result.message)
+                }
+            } catch (e: Exception) {
+                Log.d("GaleriViewModel", "Delete Failure: ${e.message}")
+                errorMessage.value = "Error menghapus data: ${e.message}"
+            }
+        }
+    }
+
+    fun updateData(email: String, id: String, waktuTidur: String, waktuBangun: String, bitmap: Bitmap?){
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                val imagePart: MultipartBody.Part? = bitmap?.toMultipartBody()
+
+
+                val methodPart = "PUT".toRequestBody("text/plain".toMediaTypeOrNull())
+
+                val updatedTidur = TidurApi.service.updateTidur(
+                    email,
+                    id,
+                    methodPart,
+                    waktuTidur.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    waktuBangun.toRequestBody("text/plain".toMediaTypeOrNull()),
+                    imagePart
+                )
+                retrieveData(email)
+                errorMessage.value = "Data berhasil diperbarui!"
+            } catch (e: Exception) {
+                Log.d("GaleriViewModel", "Update Failure: ${e.message}")
+                errorMessage.value = "Error memperbarui data: ${e.message}"
+            }
+        }
+    }
+
     private fun Bitmap.toMultipartBody(): MultipartBody.Part {
         val stream = ByteArrayOutputStream()
         compress(Bitmap.CompressFormat.JPEG, 80, stream)
